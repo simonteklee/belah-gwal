@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4C1D95">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="በላሕ ጓል">
+<title>በላሕ ጓል (beta 3)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Noto+Sans+Ethiopic:wght@400;700;800&display=swap">
+<style>
+:root{--bg:#4C1D95;--card:#5B21B6;--card2:#6D28D9;--tx:#fff;--mute:#DDD0F7;--acc:#FDE047;--acctx:#2E1065;--line:rgba(255,255,255,.28);--ok:#86EFAC;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2E1065;--card:#3F1A8A;--card2:#4C1D95}}
+:root[data-theme="dark"]{--bg:#2E1065;--card:#3F1A8A;--card2:#4C1D95}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font-family:"Bricolage Grotesque","Noto Sans Ethiopic",system-ui,sans-serif;font-size:18px;max-width:620px;margin:0 auto;min-height:100vh}
+button,a{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+header{padding:18px 18px 6px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-size:2.1rem;font-weight:800;line-height:1.1}
+h2{font-size:1.5rem;font-weight:800;padding:14px 18px 8px}
+h2.h0{padding-left:0}
+.me{background:var(--card2);padding:10px 14px;border-radius:99px;font-weight:700;font-size:.95rem;white-space:nowrap}
+.tools{padding:8px 18px;display:grid;grid-template-columns:1fr auto;gap:10px}
+input,select{font:inherit;font-size:1.05rem;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--tx);width:100%}
+input::placeholder{color:var(--mute)}
+select{width:auto;max-width:100%}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 18px 8px;align-items:center}
+.chip{background:var(--card);padding:10px 16px;border-radius:99px;white-space:nowrap;font-weight:700}
+.chip.on{background:var(--acc);color:var(--acctx)}
+.info{margin:4px 18px 8px;padding:12px 14px;border-radius:14px;background:var(--card);font-size:.88rem;color:var(--mute);line-height:1.35}
+.list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:4px 18px 120px}
+.card{background:var(--card);border-radius:20px;display:flex;flex-direction:column;text-align:left;width:100%;overflow:hidden;box-shadow:0 6px 18px rgba(20,5,60,.35)}
+.pic{height:104px;background:linear-gradient(145deg,var(--card2),var(--card));display:grid;place-items:center;font-size:3.5rem}
+.inf{padding:12px 14px 14px;display:grid;gap:3px}
+.st{color:var(--mute);font-weight:600;font-size:.82rem}
+.nm{font-weight:800;font-size:1.05rem;line-height:1.2}
+.vl{color:var(--mute);font-size:.82rem}
+.pr{font-size:1.4rem;font-weight:800;line-height:1.1;margin-top:4px;color:var(--acc)}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:620px;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card2);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));z-index:3}
+nav button{padding:8px 2px;font-weight:700;font-size:.82rem;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--mute)}
+nav button .i{font-size:1.5rem}
+nav button.on{color:var(--acc)}
+.box{background:var(--card);margin:0 18px 12px;border-radius:18px;padding:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.row:last-child{border-bottom:0}
+.btn{background:var(--acc);color:var(--acctx);font-weight:800;padding:12px 18px;border-radius:14px;font-size:1rem}
+.btn.g{background:var(--card2);color:var(--tx)}
+.btn.w{width:100%;margin-top:8px}
+a.btn{display:block;text-align:center;text-decoration:none}
+.low{background:var(--ok);color:#14391F;font-weight:800;border-radius:8px;padding:2px 8px;font-size:.8rem}
+.tag{background:var(--card2);border-radius:8px;padding:2px 8px;font-size:.78rem;font-weight:700}
+.cmpn{font-weight:800;font-size:1.25rem;margin-bottom:6px}
+.sheet{position:fixed;inset:0;background:var(--bg);overflow-y:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 18px 40px;z-index:5}
+.big{font-size:5rem;text-align:center;background:var(--card2);border-radius:24px;padding:20px;margin:14px 0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--acc);color:var(--acctx);font-weight:800;padding:12px 18px;border-radius:14px;z-index:9;max-width:90%;text-align:center}
+.mute{color:var(--mute)}
+.empty{grid-column:1/-1;padding:30px 18px;color:var(--mute);text-align:center}
+ul.ul{padding-left:22px;margin-top:10px}
+ul.ul li{padding:8px 0;border-bottom:1px solid var(--line)}
+ul.ul li:last-child{border-bottom:0}
+.li{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.ok{color:var(--ok);font-weight:700;text-align:left;font-size:.95rem}
+.x{color:var(--mute);font-size:.9rem;text-decoration:underline;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+var DV="",WEEK="",DATA={week:0,fetched:"",items:[]};
+var SN={W:"Willys Mariahallen",S:"ICA Nära Sergels Torg",E:"ICA Supermarket Esplanad",B:"ICA Nära Banér"};
+var ICAS="https://www.ica.se/butiker/",MI="https://matpriskollen.se/mataffarer/ica";
+var STO={
+"Willys Mariahallen":{k:"mat",near:1,d:1,site:"https://www.willys.se",src:"https://matpriskollen.se/mataffarer/willys"},
+"ICA Supermarket Aptiten":{k:"mat",near:1,d:0,site:"https://www.ica.se/erbjudanden/ica-supermarket-aptiten-1003988/"},
+"ICA Nära Sergels Torg":{k:"mat",d:1,site:ICAS,src:MI},
+"ICA Supermarket Esplanad":{k:"mat",d:1,site:ICAS,src:MI},
+"ICA Nära Banér":{k:"mat",d:1,site:ICAS,src:MI},
+"Lidl":{k:"mat",d:0,site:"https://matpriskollen.se/mataffarer/lidl"},
+"Coop":{k:"mat",d:0,site:"https://matpriskollen.se/mataffarer/coop"},
+"Rusta":{k:"fav",d:0,site:"https://matpriskollen.se/mataffarer/rusta"},
+"Öob":{k:"fav",d:0,site:"https://matpriskollen.se/mataffarer/oob"},
+"Biltema":{k:"fav",d:0,site:"https://www.biltema.se"},
+"MM Sport":{k:"prot",d:0,site:"https://www.mmsport.se"},
+"Tyngre":{k:"prot",d:0,site:"https://www.tyngre.se"},
+"Gymgrossisten":{k:"prot",d:0,site:"https://www.gymgrossisten.com"}};
+var DEF=["Willys Mariahallen","ICA Supermarket Aptiten","ICA Nära Sergels Torg","ICA Supermarket Esplanad","ICA Nära Banér"];
+var KIND={all:"Alla",mat:"Mat",fav:"Favoriter",prot:"Protein"};
+var EC={Kött:"🥩",Mejeri:"🥛",Ost:"🧀",Fisk:"🐟",Frukt:"🍎",Grönsaker:"🥕",Skafferi:"🥫",Snacks:"🍫",Drycker:"🥤",Färdigmat:"🍽️",Hem:"🏠",Barn:"🧸",Djur:"🐾",Chark:"🥓",Korv:"🥓",Dessert:"🍰",Bröd:"🍞",Kroppsvård:"🪥"};
+var EK=[[/kyckl/i,"🍗"],[/pizza/i,"🍕"],[/pasta/i,"🍝"],[/chips/i,"🥔"],[/kaffe/i,"☕"],[/smör/i,"🧈"],[/ljus/i,"🕯️"],[/papper/i,"🧻"],[/choklad|lindor/i,"🍫"],[/lax|torsk/i,"🐟"],[/tvättmedel|maskindisk/i,"🧺"]];
+function emo(n,c){for(var i=0;i<EK.length;i++)if(EK[i][0].test(n))return EK[i][1];return EC[c]||"🛒"}
+var P=[];
+var st={name:"",saved:[],watch:[],list:[],stores:DEF.slice(),custom:[],hist:[],notif:false,nt:[],seen:[],dv:"",near:false,kind:"all",cat:"alla",q:"",sort:"rek",view:"home",sheet:null,histOpen:false,toast:""};
+var KEEP=["name","saved","watch","list","stores","custom","hist","notif","nt","seen","dv"];
+function ld(){try{var d=JSON.parse(localStorage.getItem("bg3")||"{}");KEEP.forEach(function(k){if(k in d)st[k]=d[k]})}catch(e){}}
+function sv(){try{var o={};KEEP.forEach(function(k){o[k]=st[k]});localStorage.setItem("bg3",JSON.stringify(o))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function key(p){return p.s+"|"+p.n+"|"+p.d}
+function pt(s){return /kr/.test(s)?s:s+" kr"}
+function sh(s){return s.replace(/^ICA (Nära|Supermarket) /,"ICA ")}
+function num(n){return n.toFixed(2).replace(".",",")}
+function allS(){return Object.keys(STO).concat(st.custom.map(function(c){return c.n}))}
+function getS(n){if(STO[n])return STO[n];for(var i=0;i<st.custom.length;i++)if(st.custom[i].n==n)return{k:"fav",d:0,site:st.custom[i].url,c:1};return{k:/ICA|Willys|Lidl|Coop|Hemk|City Gross/i.test(n)?"mat":"fav",d:1}}
+function act(){return P.filter(function(p){return st.stores.indexOf(p.s)>=0})}
+function words(s){return s.toLowerCase().split(/[\s,\/]+/).filter(function(w){return w.length>2})}
+function matches(t){var w=words(t);if(!w.length)return[];return act().filter(function(p){var tk=(p.n+" "+p.d).toLowerCase().split(/[^a-zåäöéøü0-9]+/);return w.every(function(x){return tk.some(function(k){return k==x||(x.length>=6&&k.indexOf(x)==0)})})})}
+function notify(t,b){try{if(st.notif&&"Notification" in window&&Notification.permission==="granted")new Notification(t,{body:b})}catch(e){}}
+function toast(m){st.toast=m;render();clearTimeout(toast.t);toast.t=setTimeout(function(){st.toast="";render()},3200)}
+function tog(kind,i){var p=P[i],k=key(p);
+ if(!st.name){st.sheet={t:"name",th:[kind,i]};render();return}
+ var a=st[kind],x=a.indexOf(k);
+ if(x<0){a.push(k);toast(kind=="watch"?"Du bevakar "+p.n:"Sparad");if(kind=="watch")notify("Bevakar "+p.n,"Du får en notis när den kommer på kampanj igen.")}
+ else{a.splice(x,1);toast("Borttagen")}
+ sv();render()}
+function addList(t){t=(t||"").trim();if(!t)return;
+ if(st.list.some(function(x){return x.toLowerCase()==t.toLowerCase()})){toast("Finns redan på listan");return}
+ st.list.push(t);var m=matches(t);
+ if(m.length){st.nt.push(t.toLowerCase());notify(t+" är på kampanj",pt(m[0].p)+" hos "+m[0].s)}
+ sv();toast(m.length?t+" är på kampanj: "+pt(m[0].p)+" hos "+sh(m[0].s):"Tillagd på listan")}
+function toggleStore(i){var s=allS()[i],x=st.stores.indexOf(s),d=new Date().toLocaleDateString("sv-SE");
+ if(x<0){st.stores.push(s);st.hist.unshift({s:s,a:"Lades till",d:d})}else{st.stores.splice(x,1);st.hist.unshift({s:s,a:"Togs bort",d:d})}
+ sv();render()}
+var A={
+ go:function(v){st.view=v;st.sheet=null;render();window.scrollTo(0,0)},
+ open:function(i){st.sheet={t:"item",i:+i};render()},
+ close:function(){st.sheet=null;render()},
+ kind:function(k){st.kind=k;render()},
+ near:function(){st.near=!st.near;render()},
+ save:function(i){tog("saved",+i)},
+ watch:function(i){tog("watch",+i)},
+ name:function(){st.sheet={t:"name",th:null};render()},
+ setname:function(){var v=document.getElementById("nm").value.trim();if(!v)return;st.name=v;sv();var th=st.sheet.th;st.sheet=null;if(th)tog(th[0],th[1]);else render()},
+ addlist:function(i){addList(P[+i].n);render()},
+ add:function(){var el=document.getElementById("li");addList(el.value)},
+ rm:function(i){st.list.splice(+i,1);sv();render()},
+ store:function(i){toggleStore(+i)},
+ addstore:function(){var n=document.getElementById("ns").value.trim(),u=document.getElementById("nu").value.trim();
+  if(!n||allS().indexOf(n)>=0){toast("Skriv ett nytt butiksnamn");return}
+  if(u&&u.indexOf("https://")!=0){toast("Länken måste börja med https://");return}
+  st.custom.push({n:n,url:u});st.stores.push(n);st.hist.unshift({s:n,a:"Lades till",d:new Date().toLocaleDateString("sv-SE")});sv();toast(n+" är tillagd");},
+ hist:function(){st.histOpen=!st.histOpen;render()},
+ non:function(){
+  if(!("Notification" in window)){st.notif=true;sv();toast("Notiser visas i appen i den här betan");return}
+  Notification.requestPermission().then(function(r){st.notif=(r=="granted");sv();toast(st.notif?"Notiser är på":"Notiser blockerades i webbläsaren")})},
+ noff:function(){st.notif=false;sv();toast("Notiser är av")},
+ ntest:function(){var m=st.list.length?matches(st.list[0]):[];var p=m[0]||act()[0];if(!p){toast("Inga kampanjer att testa med");return}
+  toast("Testnotis: "+p.n+" "+pt(p.p)+" hos "+sh(p.s));notify("Testnotis: "+p.n,pt(p.p)+" hos "+p.s)},
+ logout:function(){st.name="";st.saved=[];st.watch=[];sv();render()}
+};
+document.addEventListener("click",function(e){var t=e.target.closest("[data-a]");if(!t)return;var f=A[t.dataset.a];if(f)f(t.dataset.i)});
+document.addEventListener("input",function(e){if(e.target.id=="q"){st.q=e.target.value;render()}});
+document.addEventListener("change",function(e){if(e.target.id=="sort"){st.sort=e.target.value;render()}if(e.target.id=="cat"){st.cat=e.target.value;render()}});
+document.addEventListener("keydown",function(e){if(e.key=="Enter"&&e.target.id=="li")A.add()});
+function card(p){var k=key(p);
+ return '<button class="card" data-a="open" data-i="'+p.id+'"><div class="pic">'+p.e+'</div><div class="inf"><div class="st">'+esc(sh(p.s))+(st.saved.indexOf(k)>=0?' ♥':'')+(st.watch.indexOf(k)>=0?' 🔔':'')+(p.old?' · <b>Gammal</b>':'')+'</div><div class="nm">'+esc(p.n)+'</div><div class="vl">'+esc(p.d)+'</div><div class="pr">'+esc(pt(p.p))+'</div></div></button>'}
+function top(){return '<header><h1>በላሕ ጓል</h1><button class="me" data-a="name">'+(st.name?esc(st.name):'Skriv namn')+'</button></header>'}
+function home(){
+ var l=act().filter(function(p){var S=getS(p.s);return(st.kind=="all"||S.k==st.kind)&&(!st.near||S.near)});
+ var cats=[];l.forEach(function(p){if(cats.indexOf(p.c)<0)cats.push(p.c)});cats.sort();
+ if(st.cat!="alla"&&cats.indexOf(st.cat)<0)st.cat="alla";
+ if(st.cat!="alla")l=l.filter(function(p){return p.c==st.cat});
+ var q=st.q.toLowerCase();if(q)l=l.filter(function(p){return(p.n+" "+p.d+" "+p.s+" "+p.c).toLowerCase().indexOf(q)>=0});
+ var f={pris:function(a,b){return a.v-b.v},prisn:function(a,b){return b.v-a.v},az:function(a,b){return a.n.localeCompare(b.n,"sv")}}[st.sort];if(f)l.sort(f);l=l.filter(function(p){return !p.old}).concat(l.filter(function(p){return p.old}));
+ var h='<div class="info">Kampanjer '+WEEK+', hämtade '+DATA.fetched+'. Äldre kampanjer visas sist och är märkta Gammal.</div>';
+ h+='<div class="tools"><input id="q" type="search" placeholder="Sök produkt, märke eller butik" value="'+esc(st.q)+'" aria-label="Sök"><select id="sort" aria-label="Sortera"><option value="rek">Sortera</option><option value="pris"'+(st.sort=="pris"?" selected":"")+'>Lägst pris</option><option value="prisn"'+(st.sort=="prisn"?" selected":"")+'>Högst pris</option><option value="az"'+(st.sort=="az"?" selected":"")+'>A–Ö</option></select></div><div class="chips">';
+ for(var k in KIND)h+='<button class="chip'+(st.kind==k?" on":"")+'" data-a="kind" data-i="'+k+'">'+KIND[k]+'</button>';
+ h+='<button class="chip'+(st.near?" on":"")+'" data-a="near">Nära Mariatorget</button><select id="cat" aria-label="Kategori"><option value="alla">Alla kategorier</option>';
+ cats.forEach(function(c){h+='<option'+(st.cat==c?" selected":"")+'>'+c+'</option>'});
+ h+='</select></div><div class="list">';
+ if(!l.length)h+='<div class="empty">Inga träffar. Prova en annan sökning, stäng av filtret eller lägg till fler butiker under Butiker.</div>';
+ l.forEach(function(p){h+=card(p)});return h+'</div>'}
+function groups(){var g={};act().forEach(function(p){if(p.g){(g[p.g]=g[p.g]||[]).push(p)}});return g}
+function cmp(){var g=groups(),names=Object.keys(g).filter(function(k){return g[k].map(function(p){return p.s}).filter(function(s,i,a){return a.indexOf(s)==i}).length>1});
+ var h='<h2>Prisjämförelse</h2><p class="mute" style="padding:0 18px 10px">Samma sorts vara i dina valda butiker, jämförpris per enhet, billigast överst. Jag har bara jämfört varor som går att jämföra rättvist.</p>';
+ if(!names.length)return h+'<div class="empty">Lägg till minst två butiker som har samma sorts vara, så visas jämförelsen här.</div>';
+ names.forEach(function(n){var o=g[n].slice().sort(function(a,b){return a.jm-b.jm});
+  h+='<div class="box"><div class="cmpn">'+o[0].e+' '+esc(n)+'</div>';
+  o.forEach(function(p,i){h+='<button class="row" data-a="open" data-i="'+p.id+'"><span>'+esc(sh(p.s))+(i==0?' <span class="low">Billigast</span>':'')+'<br><span class="mute" style="font-size:.85rem">'+esc(p.n)+', '+esc(pt(p.p))+'</span></span><b style="font-size:1.2rem;white-space:nowrap">'+num(p.jm)+' '+p.ju+'</b></button>'});
+  var d=Math.round((1-o[0].jm/o[o.length-1].jm)*100);
+  h+='<p class="mute" style="font-size:.9rem;padding-top:6px">Billigast är '+d+' % billigare per enhet än dyrast.</p></div>'});
+ return h}
+function mine(){
+ var h='<h2>Inköpslista</h2><div class="box"><div style="display:grid;grid-template-columns:1fr auto;gap:10px"><input id="li" placeholder="Skriv en vara, till exempel smör"><button class="btn" data-a="add">Lägg till</button></div>';
+ if(!st.list.length)h+='<p class="mute" style="padding-top:12px">Listan är tom. Varor på listan som kommer på kampanj ger en notis.</p>';
+ else{h+='<ul class="ul">';st.list.forEach(function(t,i){var m=matches(t);
+  h+='<li><div class="li"><div><b>'+esc(t)+'</b>'+(m.length?'<br><button class="ok" data-a="open" data-i="'+m[0].id+'">På kampanj: '+esc(pt(m[0].p))+' hos '+esc(sh(m[0].s))+(m.length>1?' (+'+(m.length-1)+' till)':'')+'</button>':'<br><span class="mute" style="font-size:.9rem">Inte på kampanj just nu</span>')+'</div><button class="x" data-a="rm" data-i="'+i+'">Ta bort</button></div></li>'});
+  h+='</ul>'}
+ h+='</div>';
+ var s=P.filter(function(p){return st.saved.indexOf(key(p))>=0}),w=P.filter(function(p){return st.watch.indexOf(key(p))>=0});
+ h+='<h2>Sparade</h2><div class="list" style="padding-bottom:10px">';
+ if(!st.name)h+='<div class="empty">Skriv ditt namn för att spara och bevaka produkter.</div>';
+ else if(!s.length)h+='<div class="empty">Inget sparat än. Öppna en produkt och tryck Spara.</div>';
+ s.forEach(function(p){h+=card(p)});h+='</div><h2>Bevakade</h2><div class="list" style="padding-bottom:10px">';
+ if(st.name&&!w.length)h+='<div class="empty">Inga bevakade produkter än.</div>';
+ w.forEach(function(p){h+=card(p)});
+ h+='</div><div class="box"><div class="row"><span><b>Notiser</b><br><span class="mute" style="font-size:.9rem">'+(st.notif?"På":"Av")+'</span></span>'+(st.notif?'<button class="btn g" data-a="noff">Slå av</button>':'<button class="btn" data-a="non">Slå på</button>')+'</div><button class="btn g w" data-a="ntest">Testa en notis</button><p class="mute" style="font-size:.85rem;padding-top:10px">Du får notis när appen öppnas efter en uppdatering och en vara på din lista eller bevakning har kommit på kampanj. Notiser när appen är stängd kräver en server.</p>'+(st.name?'<button class="btn g w" data-a="logout">Logga ut och rensa sparade</button>':'')+'</div><div style="height:110px"></div>';
+ return h}
+function shops(){
+ var h='<h2>Butiker</h2><div class="box">';
+ allS().forEach(function(n,i){var S=getS(n),on=st.stores.indexOf(n)>=0;
+  h+='<div class="row"><span><b>'+esc(n)+'</b><br>'+(S.near?'<span class="tag">Nära Mariatorget</span> ':'')+'<span class="tag">'+(S.d?'Data v48':'Ingen data än')+'</span>'+(S.site&&S.site.indexOf("https://")==0?' <a class="x" href="'+esc(S.site)+'" target="_blank" rel="noopener noreferrer">Öppna</a>':'')+'</span><button class="btn'+(on?' g':'')+'" data-a="store" data-i="'+i+'">'+(on?'Ta bort':'Lägg till')+'</button></div>'});
+ h+='</div><div class="box"><b>Lägg till egen butik, till exempel Coop</b><input id="ns" placeholder="Butikens namn" style="margin-top:10px"><input id="nu" placeholder="Länk till butikens kampanjsida (https://…)" style="margin-top:8px"><button class="btn w" data-a="addstore">Lägg till butik</button><p class="mute" style="font-size:.85rem;padding-top:10px">Butiken sparas med sin länk. Själva kampanjerna hämtas när jag uppdaterar appen åt dig, inte automatiskt av appen.</p></div>';
+ h+='<div style="padding:0 18px 12px"><button class="btn g w" data-a="hist">'+(st.histOpen?'Dölj historik':'Visa historik')+'</button></div>';
+ if(st.histOpen){h+='<div class="box">';if(!st.hist.length)h+='<p class="mute">Ingen historik än. Här syns butiker du lagt till eller tagit bort.</p>';
+  st.hist.forEach(function(x){h+='<div class="row"><span><b>'+esc(x.s)+'</b><br><span class="mute" style="font-size:.85rem">'+x.a+'</span></span><span class="mute">'+x.d+'</span></div>'});h+='</div>'}
+ h+='<div class="box"><b>Installera på hemskärmen</b><p class="mute" style="font-size:.9rem;padding-top:8px">iPhone (Safari): Dela, sedan Lägg till på hemskärmen. Android (Chrome): menyn med tre punkter, sedan Lägg till på startskärmen.</p></div><div style="height:110px"></div>';
+ return h}
+function sheet(){var s=st.sheet;if(!s)return"";
+ if(s.t=="name")return '<div class="sheet"><h2 class="h0">Vad heter du?</h2><p class="mute" style="margin-bottom:14px">Ditt namn räcker för att spara och bevaka. Inget lösenord behövs.</p><input id="nm" placeholder="Ditt namn" value="'+esc(st.name)+'" autocomplete="name"><button class="btn w" data-a="setname">Fortsätt</button><button class="btn g w" data-a="close">Avbryt</button></div>';
+ var p=P[s.i],k=key(p),S=getS(p.s),sv_=st.saved.indexOf(k)>=0,wt=st.watch.indexOf(k)>=0;
+ var h='<div class="sheet"><button class="btn g" data-a="close">Tillbaka</button><div class="big">'+p.e+'</div><div class="st">'+esc(p.s)+' · '+esc(p.c)+'</div><h1>'+esc(p.n)+'</h1><p class="mute">'+esc(p.d)+'</p><div style="font-size:2.6rem;font-weight:800;color:var(--acc);margin:10px 0">'+esc(pt(p.p))+'</div><p class="mute" style="margin-bottom:12px">Hämtad '+p.f+(p.old?' (gammal, kan ha gått ut)':'')+'. Kontrollera priset i butiken.</p>';
+ if(S.site&&S.site.indexOf("https://")==0)h+='<a class="btn w" href="'+esc(S.site)+'" target="_blank" rel="noopener noreferrer">Gå till '+esc(p.s)+'</a>';
+ if(S.src)h+='<a class="btn g w" href="'+esc(S.src)+'" target="_blank" rel="noopener noreferrer">Visa källan på Matpriskollen</a>';
+ h+='<button class="btn g w" data-a="save" data-i="'+p.id+'">'+(sv_?'Ta bort från sparade':'Spara')+'</button><button class="btn g w" data-a="watch" data-i="'+p.id+'">'+(wt?'Sluta bevaka':'Bevaka')+'</button><button class="btn g w" data-a="addlist" data-i="'+p.id+'">Lägg på inköpslistan</button>';
+ if(p.g){var o=act().filter(function(x){return x.g==p.g}).sort(function(a,b){return a.jm-b.jm});
+  h+='<h2 class="h0">Jämför: '+esc(p.g)+'</h2><div class="box" style="margin:0">';
+  o.forEach(function(x,i){h+='<div class="row"><span>'+esc(sh(x.s))+(i==0?' <span class="low">Billigast</span>':'')+'</span><b>'+num(x.jm)+' '+x.ju+'</b></div>'});h+='</div>'}
+ h+='<h2 class="h0">Prishistorik</h2><div class="box" style="margin:0"><div class="row"><span>Vecka '+p.w+'</span><b>'+esc(pt(p.p))+'</b></div><p class="mute" style="font-size:.85rem;padding-top:8px">Fler veckor visas här när appen har uppdaterats flera veckor i rad.</p></div></div>';
+ return h}
+function render(){
+ var v=st.view,h=top()+(v=="home"?home():v=="cmp"?cmp():v=="mine"?mine():shops());
+ h+='<nav>';[["home","🏷️","Kampanjer"],["cmp","⚖️","Jämför"],["mine","📝","Min lista"],["shops","🏪","Butiker"]].forEach(function(n){h+='<button class="'+(st.view==n[0]?'on':'')+'" data-a="go" data-i="'+n[0]+'"><span class="i">'+n[1]+'</span>'+n[2]+'</button>'});
+ h+='</nav>'+sheet()+(st.toast?'<div class="toast" role="status">'+esc(st.toast)+'</div>':'');
+ var a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart;
+ document.getElementById("app").innerHTML=h;
+ if(id=="q"){var el=document.getElementById("q");el.focus();try{el.setSelectionRange(pos,pos)}catch(e){}}}
+
+function today(){return new Date().toISOString().slice(0,10)}
+function ageDays(f){return Math.floor((Date.parse(today())-Date.parse(f))/86400000)}
+function unit(p){if(/kr\/kg/.test(p.p))return{jm:p.v,ju:"kr/kg"};if(/\d\s?x\s?\d|\d-\d/i.test(p.d))return null;
+ var m=p.d.match(/(\d+(?:,\d+)?)\s?(kg|g|dl|cl|ml|l)\b/i);if(!m)return null;
+ var q=parseFloat(m[1].replace(",","."))*{kg:1,g:.001,l:1,dl:.1,cl:.01,ml:.001}[m[2].toLowerCase()];
+ return q>0?{jm:p.v/q,ju:(/^k?g$/i.test(m[2]))?"kr/kg":"kr/l"}:null}
+function build(){
+ P=DATA.items.map(function(a,i){var p={id:i,s:a.s,n:a.n,d:a.d||"",p:a.p,v:+a.v||0,c:a.c||"Övrigt",g:a.g||"",jm:+a.jm||0,ju:a.ju||"",f:a.f||DATA.fetched,w:a.w||DATA.week};
+  p.e=emo(p.n,p.c);p.old=ageDays(p.f)>8;
+  if(!p.g){var u=unit(p);if(u){p.g=p.n.split(",")[0].trim();p.jm=u.jm;p.ju=u.ju}}return p});
+ DV=DATA.week+"-"+DATA.fetched;WEEK="vecka "+DATA.week}
+function load(){fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){DATA=j;build();init()}).catch(function(){document.getElementById("app").innerHTML='<div class="info" style="margin-top:40px">Kunde inte läsa data.json. Öppna appen via en webbadress (till exempel GitHub Pages), inte som en lokal fil.</div>'})}
+function init(){ld();
+ try{var m={name:"በላሕ ጓል",short_name:"በላሕ ጓል",display:"standalone",background_color:"#4C1D95",theme_color:"#4C1D95"},l=document.createElement("link");l.rel="manifest";l.href="data:application/manifest+json,"+encodeURIComponent(JSON.stringify(m));document.head.appendChild(l)}catch(e){}
+ var keys=P.map(key),msg="";
+ if(st.dv&&st.dv!==DV){var nw=P.filter(function(p){return st.seen.indexOf(key(p))<0&&st.stores.indexOf(p.s)>=0}),hit=nw.filter(function(p){return st.watch.indexOf(key(p))>=0||st.list.some(function(t){return matches(t).indexOf(p)>=0})});
+  msg=nw.length+" nya kampanjer sedan sist"+(hit.length?". På din lista eller bevakning: "+hit.slice(0,3).map(function(p){return p.n}).join(", "):"");
+  if(hit.length)notify("Nya kampanjer på din lista",hit.slice(0,3).map(function(p){return p.n}).join(", "))}
+ else{var nm=st.list.filter(function(t){return matches(t).length&&st.nt.indexOf(t.toLowerCase())<0});
+  if(nm.length){msg="På kampanj nu: "+nm.slice(0,3).join(", ");nm.forEach(function(t){st.nt.push(t.toLowerCase())});notify("Varor på din lista är på kampanj",nm.slice(0,3).join(", "))}}
+ st.dv=DV;st.seen=keys;sv();render();if(msg)toast(msg)}
+load();
+</script>
+</body>
+</html>
