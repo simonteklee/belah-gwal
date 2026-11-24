@@ -42,6 +42,9 @@ Butikerna ligger i listan `PAGES` i `scraper.py`. Öppna butikens sida på matpr
 
 - Willys Mariahallen, Hornsgatan 74
 - ICA Supermarket Aptiten, Torkel Knutssonsg 16
+- ICA Nära Banér, Banérgatan
+- ICA Supermarket Esplanad, Stockholm
+- ICA Nära Sergels Torg, Stockholm
 
 Har en butik ingen data än visas den som "Ingen data än" i appen. Misslyckas en hämtning behålls butikens gamla varor, så inget försvinner.
 

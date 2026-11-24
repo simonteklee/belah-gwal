@@ -37,12 +37,23 @@ PAGES = [
     "https://matpriskollen.se/butiker/willys-mariahallen--537051f9-9354-4758-8d6e-293b1ee06d12",
     # ICA Supermarket Aptiten, Torkel Knutssonsg 16
     "https://matpriskollen.se/butiker/aptiten--27bc426c-0e75-4f77-9713-736dcfedcf45",
+    # ICA Nära Banér, Banérgatan
+    "https://matpriskollen.se/butiker/ica-nara-baner--d433f430-d5e9-44a5-a7e6-ac81ee1a1f0c",
+    # ICA Supermarket Esplanad, Stockholm
+    "https://matpriskollen.se/butiker/ica-supermarket-esplanad-stockholm--11efff3a-fae3-4093-b92e-afdd473dbff0",
+    # ICA Nära Sergels Torg, Stockholm
+    "https://matpriskollen.se/butiker/ica-nara-sergels-torg--befc72b5-8a15-4323-9129-7021dd6cfd9d",
 ]
 UA = "Kampanjkollen/0.2 (privat hobbyprojekt, hämtar en gång i veckan)"
 OUT = "data.json"
 
 DEAL_COUNT = re.compile(r"^(\d+) för (\d+(?:,\d+)?)$")
 PER_UNIT = re.compile(r"^(\d+(?:,\d+)?)(?:-\d+(?:,\d+)?)?/([A-Za-zåäöÅÄÖ]+)$")
+
+# Butiksnamn som sidan skriver med ortssuffix men appen visar utan.
+STORE_ALIAS = {
+    "ICA Supermarket Esplanad Stockholm": "ICA Supermarket Esplanad",
+}
 
 # Kortare kategorinamn som ibland förekommer i äldre data. Appen har emoji per fullt namn.
 CATEGORY_MAP = {
@@ -56,6 +67,11 @@ CATEGORY_MAP = {
     "Snacks": "Snacks & Godis",
     "Kropp": "Kroppsvård",
 }
+
+
+def store_name(name):
+    name = (name or "").strip()
+    return STORE_ALIAS.get(name, name)
 
 
 def category(name):
@@ -158,7 +174,7 @@ def to_items(deals, week, today):
         if not title or not value:
             continue  # utan pris går varan inte att sortera eller jämföra
         item = {
-            "s": (d.get("store") or "").strip(),
+            "s": store_name(d.get("store")),
             "n": title,
             "d": (d.get("subtitle") or d.get("volume") or "").strip(),
             "p": price_text(price),
@@ -211,10 +227,16 @@ def main():
 
     # Behåll varor från butiker som inte kunde hämtas. Appen märker dem "Gammal" efter 8 dagar.
     kept = []
+    seen = {(it["s"], it["n"], it.get("d", "")) for it in fresh}
     for it in old.get("items", []):
-        if it.get("s") in refreshed_stores:
-            continue
+        it["s"] = store_name(it.get("s"))
         it["c"] = category(it.get("c"))
+        if it["s"] in refreshed_stores:
+            continue
+        key = (it["s"], it["n"], it.get("d", ""))
+        if key in seen:
+            continue
+        seen.add(key)
         kept.append(it)
     data = {"week": week, "fetched": today, "items": fresh + kept}
     with open(OUT, "w", encoding="utf-8") as f:
