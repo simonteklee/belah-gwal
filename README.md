@@ -45,6 +45,7 @@ Butikerna ligger i listan `PAGES` i `scraper.py`. Öppna butikens sida på matpr
 - ICA Nära Banér, Banérgatan
 - ICA Supermarket Esplanad, Stockholm
 - ICA Nära Sergels Torg, Stockholm
+- Lidl Liljeholmen, Liljeholmstorget 44 (visas som "Lidl" i appen)
 
 Har en butik ingen data än visas den som "Ingen data än" i appen. Misslyckas en hämtning behålls butikens gamla varor, så inget försvinner.
 
@@ -57,6 +58,8 @@ https://simonteklee.github.io/belah-gwal/
 ```
 
 Öppna adressen i telefonen och välj "Lägg till på hemskärmen" för att få den som app.
+
+Varje produkt har en egen adress: `#p/<id>`. Den går att ladda om, bokmärka och dela, och telefonens bakåtknapp går tillbaka till listan i stället för att stänga appen.
 
 - Uppdatera manuellt: fliken **Actions** → *Uppdatera kampanjer* → **Run workflow**.
 - Automatiskt: varje måndag 05:00 UTC.

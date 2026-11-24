@@ -43,6 +43,8 @@ PAGES = [
     "https://matpriskollen.se/butiker/ica-supermarket-esplanad-stockholm--11efff3a-fae3-4093-b92e-afdd473dbff0",
     # ICA Nära Sergels Torg, Stockholm
     "https://matpriskollen.se/butiker/ica-nara-sergels-torg--befc72b5-8a15-4323-9129-7021dd6cfd9d",
+    # Lidl Liljeholmen, Liljeholmstorget 44 (närmast Mariatorget)
+    "https://matpriskollen.se/butiker/lidl-liljeholmen--eceea6ed-bf7b-4538-b4c6-5ccd57c6d3e2",
 ]
 UA = "Kampanjkollen/0.2 (privat hobbyprojekt, hämtar en gång i veckan)"
 OUT = "data.json"
@@ -53,6 +55,7 @@ PER_UNIT = re.compile(r"^(\d+(?:,\d+)?)(?:-\d+(?:,\d+)?)?/([A-Za-zåäöÅÄÖ]+
 # Butiksnamn som sidan skriver med ortssuffix men appen visar utan.
 STORE_ALIAS = {
     "ICA Supermarket Esplanad Stockholm": "ICA Supermarket Esplanad",
+    "Lidl Liljeholmen": "Lidl",
 }
 
 # Kortare kategorinamn som ibland förekommer i äldre data. Appen har emoji per fullt namn.

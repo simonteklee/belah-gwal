@@ -80,7 +80,7 @@ var STO={
 "ICA Nära Sergels Torg":{k:"mat",d:1,site:ICAS,src:MI},
 "ICA Supermarket Esplanad":{k:"mat",d:1,site:ICAS,src:MI},
 "ICA Nära Banér":{k:"mat",d:1,site:ICAS,src:MI},
-"Lidl":{k:"mat",d:0,site:"https://matpriskollen.se/mataffarer/lidl"},
+"Lidl":{k:"mat",near:1,d:1,site:"https://www.lidl.se",src:"https://matpriskollen.se/butiker/lidl-liljeholmen--eceea6ed-bf7b-4538-b4c6-5ccd57c6d3e2"},
 "Coop":{k:"mat",d:0,site:"https://matpriskollen.se/mataffarer/coop"},
 "Rusta":{k:"fav",d:0,site:"https://matpriskollen.se/mataffarer/rusta"},
 "Öob":{k:"fav",d:0,site:"https://matpriskollen.se/mataffarer/oob"},
@@ -88,13 +88,13 @@ var STO={
 "MM Sport":{k:"prot",d:0,site:"https://www.mmsport.se"},
 "Tyngre":{k:"prot",d:0,site:"https://www.tyngre.se"},
 "Gymgrossisten":{k:"prot",d:0,site:"https://www.gymgrossisten.com"}};
-var DEF=["Willys Mariahallen","ICA Supermarket Aptiten","ICA Nära Sergels Torg","ICA Supermarket Esplanad","ICA Nära Banér"];
+var DEF=["Willys Mariahallen","ICA Supermarket Aptiten","ICA Nära Sergels Torg","ICA Supermarket Esplanad","ICA Nära Banér","Lidl"];
 var KIND={all:"Alla",mat:"Mat",fav:"Favoriter",prot:"Protein"};
 var EC={Kött:"🥩",Mejeri:"🥛",Ost:"🧀",Fisk:"🐟",Frukt:"🍎",Grönsaker:"🥕",Skafferi:"🥫",Snacks:"🍫",Drycker:"🥤",Färdigmat:"🍽️",Hem:"🏠",Barn:"🧸",Djur:"🐾",Chark:"🥓",Korv:"🥓",Dessert:"🍰",Bröd:"🍞",Kroppsvård:"🪥"};
 var EK=[[/kyckl/i,"🍗"],[/pizza/i,"🍕"],[/pasta/i,"🍝"],[/chips/i,"🥔"],[/kaffe/i,"☕"],[/smör/i,"🧈"],[/ljus/i,"🕯️"],[/papper/i,"🧻"],[/choklad|lindor/i,"🍫"],[/lax|torsk/i,"🐟"],[/tvättmedel|maskindisk/i,"🧺"]];
 function emo(n,c){for(var i=0;i<EK.length;i++)if(EK[i][0].test(n))return EK[i][1];return EC[c]||"🛒"}
 var P=[];
-var st={name:"",saved:[],watch:[],list:[],stores:DEF.slice(),custom:[],hist:[],notif:false,nt:[],seen:[],dv:"",near:false,kind:"all",cat:"alla",q:"",sort:"rek",view:"home",sheet:null,histOpen:false,toast:""};
+var st={name:"",saved:[],watch:[],list:[],stores:DEF.slice(),custom:[],hist:[],notif:false,nt:[],seen:[],dv:"",near:false,kind:"all",cat:"alla",q:"",sort:"rek",view:"home",sheet:null,histOpen:false,toast:"",pid:null};
 var KEEP=["name","saved","watch","list","stores","custom","hist","notif","nt","seen","dv"];
 function ld(){try{var d=JSON.parse(localStorage.getItem("bg3")||"{}");KEEP.forEach(function(k){if(k in d)st[k]=d[k]})}catch(e){}}
 function sv(){try{var o={};KEEP.forEach(function(k){o[k]=st[k]});localStorage.setItem("bg3",JSON.stringify(o))}catch(e){}}
@@ -125,8 +125,9 @@ function toggleStore(i){var s=allS()[i],x=st.stores.indexOf(s),d=new Date().toLo
  if(x<0){st.stores.push(s);st.hist.unshift({s:s,a:"Lades till",d:d})}else{st.stores.splice(x,1);st.hist.unshift({s:s,a:"Togs bort",d:d})}
  sv();render()}
 var A={
- go:function(v){st.view=v;st.sheet=null;render();window.scrollTo(0,0)},
- open:function(i){st.sheet={t:"item",i:+i};render()},
+ go:function(v){st.view=v;st.sheet=null;st.pid=null;if(location.hash)history.replaceState(null,"",location.pathname+location.search);render();window.scrollTo(0,0)},
+ open:function(i){st.pid=+i;st.sheet=null;if(location.hash!=="#p/"+st.pid)history.pushState({p:st.pid},"","#p/"+st.pid);P[st.pid]&&addList;render();window.scrollTo(0,0)},
+ pback:function(){if(history.state&&history.state.p){history.back()}else{st.pid=null;history.replaceState(null,"",location.pathname+location.search);render();window.scrollTo(0,0)}},
  close:function(){st.sheet=null;render()},
  kind:function(k){st.kind=k;render()},
  near:function(){st.near=!st.near;render()},
@@ -209,6 +210,18 @@ function shops(){
   st.hist.forEach(function(x){h+='<div class="row"><span><b>'+esc(x.s)+'</b><br><span class="mute" style="font-size:.85rem">'+x.a+'</span></span><span class="mute">'+x.d+'</span></div>'});h+='</div>'}
  h+='<div class="box"><b>Installera på hemskärmen</b><p class="mute" style="font-size:.9rem;padding-top:8px">iPhone (Safari): Dela, sedan Lägg till på hemskärmen. Android (Chrome): menyn med tre punkter, sedan Lägg till på startskärmen.</p></div><div style="height:110px"></div>';
  return h}
+function prodpage(){var p=P[st.pid];
+ if(!p)return '<div class="sheet"><button class="btn g" data-a="pback">← Tillbaka</button><div class="empty">Produkten finns inte kvar i listan.</div></div>';
+ var k=key(p),S=getS(p.s),sv_=st.saved.indexOf(k)>=0,wt=st.watch.indexOf(k)>=0;
+ var h='<div class="sheet"><button class="btn g" data-a="pback">← Tillbaka</button><div class="big">'+p.e+'</div><div class="st">'+esc(p.s)+' · '+esc(p.c)+'</div><h1>'+esc(p.n)+'</h1><p class="mute">'+esc(p.d)+'</p><div style="font-size:2.6rem;font-weight:800;color:var(--acc);margin:10px 0">'+esc(pt(p.p))+'</div><p class="mute" style="margin-bottom:12px">Hämtad '+p.f+(p.old?' (gammal, kan ha gått ut)':'')+'. Kontrollera priset i butiken.</p>';
+ if(S.site&&S.site.indexOf("https://")==0)h+='<a class="btn w" href="'+esc(S.site)+'" target="_blank" rel="noopener noreferrer">Gå till '+esc(p.s)+'</a>';
+ if(S.src)h+='<a class="btn g w" href="'+esc(S.src)+'" target="_blank" rel="noopener noreferrer">Visa källan på Matpriskollen</a>';
+ h+='<button class="btn g w" data-a="save" data-i="'+p.id+'">'+(sv_?'Ta bort från sparade':'Spara')+'</button><button class="btn g w" data-a="watch" data-i="'+p.id+'">'+(wt?'Sluta bevaka':'Bevaka')+'</button><button class="btn g w" data-a="addlist" data-i="'+p.id+'">Lägg på inköpslistan</button>';
+ if(p.g){var o=act().filter(function(x){return x.g==p.g}).sort(function(a,b){return a.jm-b.jm});
+  h+='<h2 class="h0">Jämför: '+esc(p.g)+'</h2><div class="box" style="margin:0">';
+  o.forEach(function(x,i){h+='<div class="row"><span>'+esc(sh(x.s))+(i==0?' <span class="low">Billigast</span>':'')+'</span><b>'+num(x.jm)+' '+x.ju+'</b></div>'});h+='</div>'}
+ h+='<h2 class="h0">Prishistorik</h2><div class="box" style="margin:0"><div class="row"><span>Vecka '+p.w+'</span><b>'+esc(pt(p.p))+'</b></div><p class="mute" style="font-size:.85rem;padding-top:8px">Fler veckor visas här när appen har uppdaterats flera veckor i rad.</p></div></div>';
+ return h}
 function sheet(){var s=st.sheet;if(!s)return"";
  if(s.t=="name")return '<div class="sheet"><h2 class="h0">Vad heter du?</h2><p class="mute" style="margin-bottom:14px">Ditt namn räcker för att spara och bevaka. Inget lösenord behövs.</p><input id="nm" placeholder="Ditt namn" value="'+esc(st.name)+'" autocomplete="name"><button class="btn w" data-a="setname">Fortsätt</button><button class="btn g w" data-a="close">Avbryt</button></div>';
  var p=P[s.i],k=key(p),S=getS(p.s),sv_=st.saved.indexOf(k)>=0,wt=st.watch.indexOf(k)>=0;
@@ -222,6 +235,7 @@ function sheet(){var s=st.sheet;if(!s)return"";
  h+='<h2 class="h0">Prishistorik</h2><div class="box" style="margin:0"><div class="row"><span>Vecka '+p.w+'</span><b>'+esc(pt(p.p))+'</b></div><p class="mute" style="font-size:.85rem;padding-top:8px">Fler veckor visas här när appen har uppdaterats flera veckor i rad.</p></div></div>';
  return h}
 function render(){
+ if(st.pid!=null){document.getElementById("app").innerHTML=prodpage()+(st.toast?'<div class="toast" role="status">'+esc(st.toast)+'</div>':'');return}
  var v=st.view,h=topbar()+(v=="home"?home():v=="cmp"?cmp():v=="mine"?mine():shops());
  h+='<nav>';[["home","🏷️","Kampanjer"],["cmp","⚖️","Jämför"],["mine","📝","Min lista"],["shops","🏪","Butiker"]].forEach(function(n){h+='<button class="'+(st.view==n[0]?'on':'')+'" data-a="go" data-i="'+n[0]+'"><span class="i">'+n[1]+'</span>'+n[2]+'</button>'});
  h+='</nav>'+sheet()+(st.toast?'<div class="toast" role="status">'+esc(st.toast)+'</div>':'');
@@ -249,7 +263,11 @@ function init(){ld();
   if(hit.length)notify("Nya kampanjer på din lista",hit.slice(0,3).map(function(p){return p.n}).join(", "))}
  else{var nm=st.list.filter(function(t){return matches(t).length&&st.nt.indexOf(t.toLowerCase())<0});
   if(nm.length){msg="På kampanj nu: "+nm.slice(0,3).join(", ");nm.forEach(function(t){st.nt.push(t.toLowerCase())});notify("Varor på din lista är på kampanj",nm.slice(0,3).join(", "))}}
- st.dv=DV;st.seen=keys;sv();render();if(msg)toast(msg)}
+ st.dv=DV;st.seen=keys;sv();
+ var mm=(location.hash||"").match(/^#p\/(\d+)$/);if(mm)st.pid=+mm[1];
+ render();if(msg)toast(msg);
+ window.addEventListener("popstate",route);window.addEventListener("hashchange",route)}
+function route(){var m=(location.hash||"").match(/^#p\/(\d+)$/),id=m?+m[1]:null;if(id!==st.pid){st.pid=id;render();window.scrollTo(0,0)}}
 load();
 </script>
 </body>
