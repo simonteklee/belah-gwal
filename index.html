@@ -8,6 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="በላሕ ጓል">
 <title>በላሕ ጓል (beta 3)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Noto+Sans+Ethiopic:wght@400;700;800&display=swap">
 <style>
 :root{--bg:#4C1D95;--card:#5B21B6;--card2:#6D28D9;--tx:#fff;--mute:#DDD0F7;--acc:#FDE047;--acctx:#2E1065;--line:rgba(255,255,255,.28);--ok:#86EFAC;
@@ -156,7 +157,7 @@ document.addEventListener("change",function(e){if(e.target.id=="sort"){st.sort=e
 document.addEventListener("keydown",function(e){if(e.key=="Enter"&&e.target.id=="li")A.add()});
 function card(p){var k=key(p);
  return '<button class="card" data-a="open" data-i="'+p.id+'"><div class="pic">'+p.e+'</div><div class="inf"><div class="st">'+esc(sh(p.s))+(st.saved.indexOf(k)>=0?' ♥':'')+(st.watch.indexOf(k)>=0?' 🔔':'')+(p.old?' · <b>Gammal</b>':'')+'</div><div class="nm">'+esc(p.n)+'</div><div class="vl">'+esc(p.d)+'</div><div class="pr">'+esc(pt(p.p))+'</div></div></button>'}
-function top(){return '<header><h1>በላሕ ጓል</h1><button class="me" data-a="name">'+(st.name?esc(st.name):'Skriv namn')+'</button></header>'}
+function topbar(){return '<header><h1>በላሕ ጓል</h1><button class="me" data-a="name">'+(st.name?esc(st.name):'Skriv namn')+'</button></header>'}
 function home(){
  var l=act().filter(function(p){var S=getS(p.s);return(st.kind=="all"||S.k==st.kind)&&(!st.near||S.near)});
  var cats=[];l.forEach(function(p){if(cats.indexOf(p.c)<0)cats.push(p.c)});cats.sort();
@@ -221,7 +222,7 @@ function sheet(){var s=st.sheet;if(!s)return"";
  h+='<h2 class="h0">Prishistorik</h2><div class="box" style="margin:0"><div class="row"><span>Vecka '+p.w+'</span><b>'+esc(pt(p.p))+'</b></div><p class="mute" style="font-size:.85rem;padding-top:8px">Fler veckor visas här när appen har uppdaterats flera veckor i rad.</p></div></div>';
  return h}
 function render(){
- var v=st.view,h=top()+(v=="home"?home():v=="cmp"?cmp():v=="mine"?mine():shops());
+ var v=st.view,h=topbar()+(v=="home"?home():v=="cmp"?cmp():v=="mine"?mine():shops());
  h+='<nav>';[["home","🏷️","Kampanjer"],["cmp","⚖️","Jämför"],["mine","📝","Min lista"],["shops","🏪","Butiker"]].forEach(function(n){h+='<button class="'+(st.view==n[0]?'on':'')+'" data-a="go" data-i="'+n[0]+'"><span class="i">'+n[1]+'</span>'+n[2]+'</button>'});
  h+='</nav>'+sheet()+(st.toast?'<div class="toast" role="status">'+esc(st.toast)+'</div>':'');
  var a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart;
