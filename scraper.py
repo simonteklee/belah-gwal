@@ -19,6 +19,19 @@ import sys
 import time
 import urllib.request
 
+try:
+    from zoneinfo import ZoneInfo
+    TZ = ZoneInfo("Europe/Stockholm")
+except Exception:  # saknas tzdata: kör lokal tid
+    TZ = None
+
+
+def local_date(ts=None):
+    """Datum i svensk tid. GitHub kör i UTC, annars blir veckan fel dagen före bytet."""
+    if ts is None:
+        return datetime.datetime.now(TZ).date()
+    return datetime.datetime.fromtimestamp(ts, TZ).date()
+
 PAGES = [
     # Willys Mariahallen, Hornsgatan 74
     "https://matpriskollen.se/butiker/willys-mariahallen--537051f9-9354-4758-8d6e-293b1ee06d12",
@@ -129,7 +142,7 @@ def week_of(deals):
     """Veckan de flesta erbjudandena börjar gälla."""
     stamps = [d.get("validFrom") or 0 for d in deals]
     newest = max(stamps) if stamps else time.time()
-    return datetime.date.fromtimestamp(newest).isocalendar()[1]
+    return local_date(newest).isocalendar()[1]
 
 
 def to_items(deals, week, today):
@@ -164,7 +177,7 @@ def to_items(deals, week, today):
 
 def main():
     debug = "--debug" in sys.argv
-    today = datetime.date.today().isoformat()
+    today = local_date().isoformat()
     try:
         old = json.load(open(OUT, encoding="utf-8"))
     except Exception:
